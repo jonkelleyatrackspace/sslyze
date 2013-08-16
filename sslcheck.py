@@ -1,6 +1,7 @@
 import ssl2json
 
-target_list = ['www.pcwebshop.co.uk','identity.api.rackspacecloud.com:443','google.com:443','www.reddit.com:443','www.example.com:443']
+target_list = ['www.pcwebshop.co.uk','identity.api.rackspacecloud.com:443','manage.rackspacecloud.com:443','google.com:443']
+
 shared_settings = {
 'certinfo':     'full',        'starttls':     None,       'resum':        None,
 'resum_rate':   None,           'http_get':     None,       'xml_file':     '/tmp/xy', 
@@ -16,6 +17,7 @@ shared_settings = {
 od = ssl2json.get(target_list,shared_settings)['document']
 print "TIME TAKEN: " + od['results']['@totalScanTime']
 import json
+
 for result in od['results']['target']:
     print "------------------------------------------------------------------------------------------------"
     print ">>>>>> " + result['@host'] + ":" + result['@port'] + "  (" +  result['@ip'] + ")"
@@ -40,6 +42,7 @@ for result in od['results']['target']:
     #print " xxxxxxxxxxxxxxxx=\t\t" + str( json.dumps(result['certinfo']['certificate']['subjectPublicKeyInfo'], indent=3) )
     #except:
      #   raise()
+
 
 #{
 # "document": {
