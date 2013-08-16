@@ -305,11 +305,12 @@ def main(target_list,shared_settings):
         xml_final_doc.append(ServersConnectivityTester.get_xml_result(targets_ERR))
         # Add the output of the plugins
         xml_final_doc.append(result_xml)
-
-        # Hack: Prettify the XML file so it's (somewhat) diff-able
         xml_final_pretty = minidom.parseString(tostring(xml_final_doc, encoding='UTF-8'))
-        with open(shared_settings['xml_file'],'w') as xml_file:
-            xml_file.write(xml_final_pretty.toprettyxml(indent="  ", encoding="utf-8" ))
+        return xml_final_pretty.toprettyxml(indent="  ", encoding="utf-8" )
+        # Hack: Prettify the XML file so it's (somewhat) diff-able
+#        xml_final_pretty = minidom.parseString(tostring(xml_final_doc, encoding='UTF-8'))
+#        with open(shared_settings['xml_file'],'w') as xml_file:
+#            xml_file.write(xml_final_pretty.toprettyxml(indent="  ", encoding="utf-8" ))
             
 
     if debug: print _format_title('Scan Completed in {0:.2f} s'.format(exec_time))
@@ -329,4 +330,5 @@ if __name__ == "__main__":
     'tlsv1_2':      None,           'tlsv1_1':      None,       'hide_rejected_ciphers': None,
     'keypass':      '',             'nb_processes': 1,          'certform':     1, 
     'timeout':      5,              'xmpp_to':      None}
-    main(target_list,shared_settings)
+    print main(target_list,shared_settings)
+

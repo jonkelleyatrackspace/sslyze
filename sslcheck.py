@@ -1,6 +1,5 @@
+import ssl2xml
 
-
-from nisslyze import *
 target_list = ['google.com:443','www.reddit.com:443','www.example.com:443']
 shared_settings = {
 'certinfo':     'full',        'starttls':     None,       'resum':        None,
@@ -14,4 +13,4 @@ shared_settings = {
 'keypass':      '',             'nb_processes': 1,          'certform':     1, 
 'timeout':      5,              'xmpp_to':      None}
 
-main(target_list,shared_settings)
+print ssl2xml.getresult(target_list,shared_settings)
