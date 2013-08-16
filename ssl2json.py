@@ -41,7 +41,7 @@ except ImportError:
 
 
 
-PROJECT_VERSION = 'ssl2json v0.1 (SSLyze v0.7)'
+PROJECT_VERSION = 'ohai v0.1 (SSLyze_v0.7)'
 PROJECT_URL = "https://github.com/jonkelleyatrackspace/sslyze"
 PROJECT_EMAIL = 'jon.kelley@rackspace.com'
 PROJECT_DESC = 'Fast and full-featured SSL scanner with wrapper.'
@@ -298,7 +298,7 @@ def get(target_list,shared_settings):
         for xml_element in xml_output_list:
             result_xml.append(xml_element)
             
-        xml_final_doc = Element('document', title = "SSLyze Scan Results",
+        xml_final_doc = Element('document', title = "SSLyze Scan Results", MyPurpose = 'To send you a dictionary with json back. Cool huh?',
                                 SSLyzeVersion = PROJECT_VERSION, 
                                 SSLyzeWeb = PROJECT_URL)
         # Add the list of invalid targets
