@@ -307,8 +307,8 @@ def get(target_list,shared_settings):
         xml_final_doc.append(result_xml)
         xml_final_pretty = minidom.parseString(tostring(xml_final_doc, encoding='UTF-8'))
         xmlout = xml_final_pretty.toprettyxml(indent="  ", encoding="utf-8" )
-        jsonout = xmltodict.parse(xmlout)
-        return json.dumps(jsonout, sort_keys=True,indent=1)
+        dictout = xmltodict.parse(xmlout)
+        return dictout
         # Hack: Prettify the XML file so it's (somewhat) diff-able
 #        xml_final_pretty = minidom.parseString(tostring(xml_final_doc, encoding='UTF-8'))
 #        with open(shared_settings['xml_file'],'w') as xml_file:
@@ -320,7 +320,7 @@ def get(target_list,shared_settings):
 
 if __name__ == "__main__":
     # JONK: My Hardcoded query
-    target_list = ['google.com:443']
+    target_list = ['identity.api.rackspacecloud.com:443']
     shared_settings = {
     'certinfo':     'full',        'starttls':     None,       'resum':        None,
     'resum_rate':   None,           'http_get':     None,       'xml_file':     '/tmp/xy', 
