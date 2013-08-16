@@ -23,7 +23,7 @@
 #   You should have received a copy of the GNU General Public License
 #   along with SSLyze.  If not, see <http://www.gnu.org/licenses/>.
 #-------------------------------------------------------------------------------
-debug=True
+debug=False
 from time import time
 from multiprocessing import Process, JoinableQueue
 from xml.etree.ElementTree import Element, tostring
@@ -131,7 +131,7 @@ def _format_txt_target_result(target, result_list):
     return _format_title(scan_txt) + '\n' + target_result_str + '\n\n'
 
 
-def main(target_list,shared_settings):
+def get(target_list,shared_settings):
 
     #--PLUGINS INITIALIZATION--
     start_time = time()
@@ -330,5 +330,5 @@ if __name__ == "__main__":
     'tlsv1_2':      None,           'tlsv1_1':      None,       'hide_rejected_ciphers': None,
     'keypass':      '',             'nb_processes': 1,          'certform':     1, 
     'timeout':      5,              'xmpp_to':      None}
-    print main(target_list,shared_settings)
+    print get(target_list,shared_settings)
 

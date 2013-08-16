@@ -13,4 +13,4 @@ shared_settings = {
 'keypass':      '',             'nb_processes': 1,          'certform':     1, 
 'timeout':      5,              'xmpp_to':      None}
 
-print ssl2xml.getresult(target_list,shared_settings)
+print ssl2xml.get(target_list,shared_settings)
