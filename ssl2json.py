@@ -1,15 +1,10 @@
 #!/usr/bin/env python
 #-------------------------------------------------------------------------------
-# Name:         sslyze.py
-# Purpose:      Main module of SSLyze.
+# Name:         ssl2xml.py
+# Purpose:      Fork of sslyze.py that allows return methods of JSON based on fed data.
 #
-# Author:       aaron, alban
-#
-# Copyright:    2012 SSLyze developers
-#
-# Class Wrapper Additions
-# Copyright:    2013 Jon Kelley
-#
+# Author:       jonkelley
+# Deps: xmltodict
 #   SSLyze is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
 #   the Free Software Foundation, either version 2 of the License, or
@@ -28,7 +23,10 @@ from time import time
 from multiprocessing import Process, JoinableQueue
 from xml.etree.ElementTree import Element, tostring
 from xml.dom import minidom
+import json
 import sys
+import xmltodict
+
 
 from plugins import PluginsFinder
 
@@ -41,7 +39,7 @@ except ImportError:
     sys.exit()
 
 
-PROJECT_VERSION = 'SslyzeWrapper v0.1 (SSLyze v0.7)'
+PROJECT_VERSION = 'ssl2json v0.1 (SSLyze v0.7)'
 PROJECT_URL = "https://github.com/jonkelleyatrackspace/sslyze"
 PROJECT_EMAIL = 'jon.kelley@rackspace.com'
 PROJECT_DESC = 'Fast and full-featured SSL scanner with wrapper.'
@@ -306,7 +304,9 @@ def get(target_list,shared_settings):
         # Add the output of the plugins
         xml_final_doc.append(result_xml)
         xml_final_pretty = minidom.parseString(tostring(xml_final_doc, encoding='UTF-8'))
-        return xml_final_pretty.toprettyxml(indent="  ", encoding="utf-8" )
+        xmlout = xml_final_pretty.toprettyxml(indent="  ", encoding="utf-8" )
+        jsonout = xmltodict.parse(xmlout)
+        return json.dumps(jsonout, sort_keys=True,indent=1)
         # Hack: Prettify the XML file so it's (somewhat) diff-able
 #        xml_final_pretty = minidom.parseString(tostring(xml_final_doc, encoding='UTF-8'))
 #        with open(shared_settings['xml_file'],'w') as xml_file:

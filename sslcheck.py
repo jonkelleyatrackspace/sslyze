@@ -1,4 +1,4 @@
-import ssl2xml
+import ssl2json
 
 target_list = ['google.com:443','www.reddit.com:443','www.example.com:443']
 shared_settings = {
@@ -13,4 +13,5 @@ shared_settings = {
 'keypass':      '',             'nb_processes': 1,          'certform':     1, 
 'timeout':      5,              'xmpp_to':      None}
 
-print ssl2xml.get(target_list,shared_settings)
+xmlresult = ssl2json.get(target_list,shared_settings)
+print xmlresult
