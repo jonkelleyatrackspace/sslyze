@@ -21,6 +21,15 @@ import json
 for result in od['results']['target']:
     print "------------------------------------------------------------------------------------------------"
     print ">>>>>> " + result['@host'] + ":" + result['@port'] + "  (" +  result['@ip'] + ")"
+    print " commonName=\t\t\t" + result['certinfo']['certificate']['subject']['commonName']
+    
+    # Monkey patch as the library's internal function is broke on some certificates. WTF?
+    # The .replace("*.*,"") was tacked on to replace wildcard certs beginning with *. with nothing, so
+    #   it matches the actual socket connect host, and validates to true.
+    if result['certinfo']['certificate']['subject']['commonName'].replace("*.", "") == result['@host']:
+        result['certinfo']['certificate']['@hasMatchingHostname'] = "True"
+    else:
+        result['certinfo']['certificate']['@hasMatchingHostname'] = "False"
     print " hasMatchingHostname=\t\t" + result['certinfo']['certificate']['@hasMatchingHostname']
     print " isExtendedValidation=\t\t" + result['certinfo']['certificate']['@isExtendedValidation']
     print " isTrustedByMozillaCAStore=\t" + result['certinfo']['certificate']['@isTrustedByMozillaCAStore']
