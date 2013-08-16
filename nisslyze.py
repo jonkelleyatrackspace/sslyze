@@ -7,6 +7,9 @@
 #
 # Copyright:    2012 SSLyze developers
 #
+# Class Wrapper Additions
+# Copyright:    2013 Jon Kelley
+#
 #   SSLyze is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
 #   the Free Software Foundation, either version 2 of the License, or
@@ -20,7 +23,7 @@
 #   You should have received a copy of the GNU General Public License
 #   along with SSLyze.  If not, see <http://www.gnu.org/licenses/>.
 #-------------------------------------------------------------------------------
-
+debug=True
 from time import time
 from multiprocessing import Process, JoinableQueue
 from xml.etree.ElementTree import Element, tostring
@@ -38,10 +41,10 @@ except ImportError:
     sys.exit()
 
 
-PROJECT_VERSION = 'SSLyze v0.7'
-PROJECT_URL = "https://github.com/isecPartners/sslyze"
-PROJECT_EMAIL = 'sslyze@isecpartners.com'
-PROJECT_DESC = 'Fast and full-featured SSL scanner'
+PROJECT_VERSION = 'SslyzeWrapper v0.1 (SSLyze v0.7)'
+PROJECT_URL = "https://github.com/jonkelleyatrackspace/sslyze"
+PROJECT_EMAIL = 'jon.kelley@rackspace.com'
+PROJECT_DESC = 'Fast and full-featured SSL scanner with wrapper.'
 
 
 # Todo: Move formatting stuff to another file
@@ -128,18 +131,18 @@ def _format_txt_target_result(target, result_list):
     return _format_title(scan_txt) + '\n' + target_result_str + '\n\n'
 
 
-def main():
+def main(target_list,shared_settings):
 
     #--PLUGINS INITIALIZATION--
     start_time = time()
-    print '\n\n\n' + _format_title('Registering available plugins')
+    if debug: print '\n\n\n' + _format_title('Registering available plugins')
     sslyze_plugins = PluginsFinder()
     available_plugins = sslyze_plugins.get_plugins()
     available_commands = sslyze_plugins.get_commands()
-    print ''
+    if debug: print ''
     for plugin in available_plugins:
-        print '  ' + plugin.__name__
-    print '\n\n'
+        if debug: print '  ' + plugin.__name__
+    if debug: print '\n\n'
 
 # jonk: goodbye cli parser
 #     Create the command line parser and the list of available options
@@ -151,19 +154,7 @@ def main():
 #        print e.get_error_msg()
 #        return
 
-# JONK: My Hardcoded query
-    target_list = ['google.com:443']
-    shared_settings = {
-    'certinfo':     'full',        'starttls':     None,       'resum':        None,
-    'resum_rate':   None,           'http_get':     None,       'xml_file':     '/tmp/xy', 
-    'compression':  None,           'tlsv1':        None,       'targets_in':   None, 
-    'cert':         None,           'https_tunnel_port': None,  'keyform':      1, 
-    'hsts':         None,           'sslv3':        None,       'sslv2':        None, 
-    'https_tunnel': None,           'sni':          None,       'https_tunnel_host': None, 
-    'regular':      None,           'key':          None,       'reneg':        None, 
-    'tlsv1_2':      None,           'tlsv1_1':      None,       'hide_rejected_ciphers': None,
-    'keypass':      '',             'nb_processes': 1,          'certform':     1, 
-    'timeout':      5,              'xmpp_to':      None}
+
     # JON_K: I need a way to make command_list instance go away in code here,
     #  the class is needed for a getattr() call, I am not sure how to factor out the getattr() call,
     #    so that I can drive this entire thing purely by shared settings, so hence, I wrote an internal class which maps 
@@ -218,7 +209,7 @@ def main():
 
     #--TESTING SECTION--
     # Figure out which hosts are up and fill the task queue with work to do
-    print _format_title('Checking host(s) availability')
+    if debug: print _format_title('Checking host(s) availability')
 
 
     targets_OK = []
@@ -239,8 +230,8 @@ def main():
     for exception in target_results:
         targets_ERR.append(exception)
         
-    print ServersConnectivityTester.get_printable_result(targets_OK, targets_ERR)
-    print '\n\n'
+    if debug: print ServersConnectivityTester.get_printable_result(targets_OK, targets_ERR)
+    if debug: print '\n\n'
 
     # Put a 'None' sentinel in the queue to let the each process know when every
     # task has been completed
@@ -278,7 +269,7 @@ def main():
 
             if len(result_dict[target]) == task_num: # Done with this target
                 # Print the results and update the xml doc
-                print _format_txt_target_result(target, result_dict[target])
+                if debug: print _format_txt_target_result(target, result_dict[target])
                 if shared_settings['xml_file']:
                     xml_output_list.append(_format_xml_target_result(target, result_dict[target]))
                            
@@ -321,8 +312,21 @@ def main():
             xml_file.write(xml_final_pretty.toprettyxml(indent="  ", encoding="utf-8" ))
             
 
-    print _format_title('Scan Completed in {0:.2f} s'.format(exec_time))
+    if debug: print _format_title('Scan Completed in {0:.2f} s'.format(exec_time))
 
 
 if __name__ == "__main__":
-    main()
+    # JONK: My Hardcoded query
+    target_list = ['google.com:443']
+    shared_settings = {
+    'certinfo':     'full',        'starttls':     None,       'resum':        None,
+    'resum_rate':   None,           'http_get':     None,       'xml_file':     '/tmp/xy', 
+    'compression':  None,           'tlsv1':        None,       'targets_in':   None, 
+    'cert':         None,           'https_tunnel_port': None,  'keyform':      1, 
+    'hsts':         None,           'sslv3':        None,       'sslv2':        None, 
+    'https_tunnel': None,           'sni':          None,       'https_tunnel_host': None, 
+    'regular':      None,           'key':          None,       'reneg':        None, 
+    'tlsv1_2':      None,           'tlsv1_1':      None,       'hide_rejected_ciphers': None,
+    'keypass':      '',             'nb_processes': 1,          'certform':     1, 
+    'timeout':      5,              'xmpp_to':      None}
+    main(target_list,shared_settings)

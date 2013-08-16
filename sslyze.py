@@ -149,7 +149,7 @@ def main():
     except CommandLineParsingError as e:
         print e.get_error_msg()
         return
-    
+    print command_list    
 
     #--PROCESSES INITIALIZATION--
     nb_processes = command_list.nb_processes
