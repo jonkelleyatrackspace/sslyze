@@ -1,9 +1,11 @@
 import ssl2json
+import logging
+logging.basicConfig(filename='sslcheck.log',level=logging.DEBUG)
 
-target_list = ['google.com:443','www.reddit.com:443','www.example.com:443']
+target_list = ['www.reddit.com:443','www.example.com:443',]
 shared_settings = {
 'certinfo':     'full',        'starttls':     None,       'resum':        None,
-'resum_rate':   None,           'http_get':     None,       'xml_file':     '/tmp/xy', 
+'resum_rate':   None,           'http_get':     None,       'xml_file':     True, 
 'compression':  None,           'tlsv1':        None,       'targets_in':   None, 
 'cert':         None,           'https_tunnel_port': None,  'keyform':      1, 
 'hsts':         None,           'sslv3':        None,       'sslv2':        None, 
@@ -11,7 +13,8 @@ shared_settings = {
 'regular':      None,           'key':          None,       'reneg':        None, 
 'tlsv1_2':      None,           'tlsv1_1':      None,       'hide_rejected_ciphers': None,
 'keypass':      '',             'nb_processes': 1,          'certform':     1, 
-'timeout':      5,              'xmpp_to':      None}
+'timeout':      0.3,              'xmpp_to':      None}
 
 xmlresult = ssl2json.get(target_list,shared_settings)
 print xmlresult
+logging.debug(xmlresult)

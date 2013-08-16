@@ -1,3 +1,5 @@
+sslcheck.log
+
 *.py[cod]
 
 # C extensions
